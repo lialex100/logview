@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System;
+using System.Net;
+
 
 namespace logview
 {
@@ -18,8 +15,16 @@ namespace logview
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Loopback, 5000);
+                    //options.Listen(IPAddress.Loopback, 5001, listenOptions =>
+                    //{
+                    //    listenOptions.UseHttps("testCert.pfx", "testPassword");
+                    //});
+                })
                 .Build();
     }
 }
